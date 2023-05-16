@@ -1,0 +1,25 @@
+version: '3.8'
+services:
+  db:
+    image: mysql
+    container_name: library-db
+    restart: always
+    environment:
+      MYSQL_DATABASE: 'libraryapi'
+      MYSQL_PASSWORD: 'root'
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - '3306:3306'
+    networks:
+      - libraryapi-network
+    healthcheck:
+      test: "/usr/bin/mysql --user=root --password=root --execute \"SHOW DATABASES;\""
+      interval: 2s
+      timeout: 20s
+      retries: 10
+    volumes:
+      - ./data:/docker-entrypoint-initdb.d
+networks:
+  libraryapi-network:
+    name: libraryapi-network
+    driver: bridge
